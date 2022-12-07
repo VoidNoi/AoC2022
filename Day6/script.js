@@ -6,21 +6,20 @@ const hasRepeats = (str) => {
   return /(.).*\1/.test(str);
 };
 
-const part1 = () => {
+const checkMarker = (size) => {
   for (let i = 0; i < buffer.length; i++) {
-    const chunk = buffer.slice(i, i + 4);
-    if (chunk.length === 4 && !hasRepeats(chunk)) {
-      return i + 4;
+    const chunk = buffer.slice(i, i + size);
+    if (chunk.length === size && !hasRepeats(chunk)) {
+      return i + size;
     }
   }
 };
+
+const part1 = () => {
+  return checkMarker(4);
+};
 const part2 = () => {
-  for (let i = 0; i < buffer.length; i++) {
-    const chunk = buffer.slice(i, i + 14);
-    if (chunk.length === 14 && !hasRepeats(chunk)) {
-      return i + 14;
-    }
-  }
+  return checkMarker(14);
 };
 
 console.log(part1());
