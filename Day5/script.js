@@ -25,22 +25,34 @@ for (let i = 0; i < rearrangement.length; i += chunkSize) {
   groups.push(chunk);
 }
 
-const part1 = () => {
+const reStack = (crateMover) => {
   const stacksCopy = stacks.map(function (arr) {
     return arr.slice();
   });
   let topCrates = '';
   groups.forEach((move) => {
-    let i = move[0];
-
+    let i = parseInt(move[0]);
+    let moveAmount = 0;
     while (i > 0) {
+      if (crateMover === 'crateMover9000') {
+        moveAmount = 1;
+      } else if (crateMover === 'crateMover9001') {
+        moveAmount = i;
+      }
       stacksCopy[move[2] - 1].push(
         stacksCopy[parseInt(move[1]) - 1][
-          stacksCopy[parseInt(move[1]) - 1].length - 1
+          stacksCopy[parseInt(move[1]) - 1].length - moveAmount
         ]
       );
+      if (crateMover === 'crateMover9000') {
+        stacksCopy[parseInt(move[1]) - 1].pop();
+      } else if (crateMover === 'crateMover9001') {
+        stacksCopy[parseInt(move[1]) - 1].splice(
+          stacksCopy[parseInt(move[1]) - 1].length - i,
+          1
+        );
+      }
 
-      stacksCopy[parseInt(move[1]) - 1].pop();
       i--;
     }
   });
@@ -50,34 +62,12 @@ const part1 = () => {
 
   return topCrates;
 };
+
+const part1 = () => {
+  return reStack('crateMover9000');
+};
 const part2 = () => {
-  let topCrates = '';
-  const stacksCopy = stacks.map(function (arr) {
-    return arr.slice();
-  });
-  groups.forEach((move) => {
-    let i = parseInt(move[0]);
-
-    while (i > 0) {
-      stacksCopy[move[2] - 1].push(
-        stacksCopy[parseInt(move[1]) - 1][
-          stacksCopy[parseInt(move[1]) - 1].length - i
-        ]
-      );
-
-      stacksCopy[parseInt(move[1]) - 1].splice(
-        stacksCopy[parseInt(move[1]) - 1].length - i,
-        1
-      );
-      i--;
-    }
-  });
-
-  stacksCopy.forEach((crates) => {
-    topCrates += crates[crates.length - 1].toString();
-  });
-
-  return topCrates;
+  return reStack('crateMover9001');
 };
 console.log(part1());
 console.log(part2());
